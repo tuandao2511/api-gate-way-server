@@ -13,7 +13,7 @@ var server = rpc.Server.$create({
     websocket: true
 });
 
-
+console.log(process.env.HOST);   
 function connectCallback(){
     connected = true;
   }
@@ -383,5 +383,5 @@ server.enableAuth(function(user, password){
 });
   
   /* HTTP/Websocket server on port 8088 */
-server.listen(8088, '54.226.243.234');
+server.listen(8088, process.env.HOST || localhost);
 
