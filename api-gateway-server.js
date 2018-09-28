@@ -4,7 +4,7 @@ var rpcBuilder = require('kurento-jsonrpc');
 var socket = require('socket.io-client')('https://tuan-dao.herokuapp.com/');
 
 var JsonRpcClient = rpcBuilder.clients.JsonRpcClient;
-var ws_uri = "ws://localhost:8888/kurento";
+var ws_uri = "ws://34.207.205.137:8888/kurento";
 
 var callerId= 0;
 var calleeId= 0;
