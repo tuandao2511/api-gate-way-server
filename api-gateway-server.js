@@ -1,7 +1,7 @@
 var rpc = require('json-rpc2');
 var rpcBuilder = require('kurento-jsonrpc');
 
-var socket = require('socket.io-client')('https://tuan-dao.herokuapp.com/');
+var socket = require('socket.io-client')('https://tuan-dao.herokuapp.com');
 
 var JsonRpcClient = rpcBuilder.clients.JsonRpcClient;
 var ws_uri = "ws://34.207.205.137:8888/kurento";
@@ -383,5 +383,5 @@ server.enableAuth(function(user, password){
 });
   
   /* HTTP/Websocket server on port 8088 */
-server.listen(8088, 'localhost');
+server.listen(8088, '54.226.243.234');
 
