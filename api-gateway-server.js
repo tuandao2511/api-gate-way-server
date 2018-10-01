@@ -1,12 +1,12 @@
 var rpc = require('json-rpc2');
 var rpcBuilder = require('kurento-jsonrpc');
 
-// var socket = require('socket.io-client')('https://tuan-dao.herokuapp.com');
-var socket = require('socket.io-client')('localhost:3000');
+var socket = require('socket.io-client')('https://tuan-dao.herokuapp.com');
+// var socket = require('socket.io-client')('localhost:3000');
 
 var JsonRpcClient = rpcBuilder.clients.JsonRpcClient;
-// var ws_uri = "ws://34.207.205.137:8888/kurento";
-var ws_uri = "ws://localhost:8888/kurento";
+var ws_uri = "ws://34.207.205.137:8888/kurento";
+// var ws_uri = "ws://localhost:8888/kurento";
 
 var callerId= 0;
 var calleeId= 0;
@@ -131,7 +131,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
 
     JsonRpcClient.send('create',params,function(error,_pipeline) {
         if(error) return callback(error);
-        console.log('Media pipeline ' + JSON.stringify(_pipeline));
+        // console.log('Media pipeline ' + JSON.stringify(_pipeline));
 
         pipeline = _pipeline.value;
         sessionId = _pipeline.sessionId;
@@ -150,16 +150,16 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
         JsonRpcClient.send('create',params,function(error,_callerWebRtcEndpoint){
             if(error) return callback(error);
     
-            console.log('webRtcEndpoint ' + JSON.stringify(_callerWebRtcEndpoint));
+            // console.log('webRtcEndpoint ' + JSON.stringify(_callerWebRtcEndpoint));
             callerWebRtcEndpoint = _callerWebRtcEndpoint.value;
 
 
               //add candidate
               if(queueCandidate[callerId]){
-                console.log('can candidate');
+                // console.log('can candidate');
                 while(queueCandidate[callerId].length){
                     var candidate = queueCandidate[callerId].shift();
-                    console.log('candidate shift ' +candidate);
+                    // console.log('candidate shift ' +candidate);
                     var params = {
                         object : callerWebRtcEndpoint,
                         operation : 'addIceCandidate',
@@ -169,7 +169,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                         sessionId :sessionId
                     };
                     JsonRpcClient.send('invoke',params,function(error,response){
-                        console.log('add candidate ' +JSON.stringify(response));
+                        // console.log('add candidate ' +JSON.stringify(response));
                     });
                 }
             }
@@ -181,7 +181,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                 sessionId : sessionId
             };
             JsonRpcClient.send('subscribe', params,function(error,response){
-                console.log('caller is subsribed ', +response);
+                // console.log('caller is subsribed ', +response);
             });
             
             //create callee webrtc endpoint
@@ -198,7 +198,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                 if(error) return callback(error);
 
                 calleeWebRtcEndpoint = _calleeWebRtcEndpoint.value;
-                console.log('webRtcEndpoint callee' + JSON.stringify(_calleeWebRtcEndpoint));
+                // console.log('webRtcEndpoint callee' + JSON.stringify(_calleeWebRtcEndpoint));
 
                 //add candidate
                 if(queueCandidate[calleeId]){
@@ -215,7 +215,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                           sessionId :sessionId
                       };
                       JsonRpcClient.send('invoke',params,function(error,response){
-                          console.log('add candidate ?????????????? ' +JSON.stringify(response));
+                        //   console.log('add candidate ?????????????? ' +JSON.stringify(response));
                       });
                   }
                 }
@@ -227,7 +227,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                     sessionId : sessionId
                 };
                 JsonRpcClient.send('subscribe', params,function(error,response){
-                    console.log('callee is subscribed ' +response);
+                    // console.log('callee is subscribed ' +response);
                 });
 
                 //assign webrtc endpoint
@@ -246,7 +246,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
 
                 JsonRpcClient.send('invoke', params, function(error,response){
                     if(error) return callback(error);
-                    console.log('connect ' +JSON.stringify(response));
+                    // console.log('connect ' +JSON.stringify(response));
                     
                     //connect callee to caller
                     var params = {
@@ -260,7 +260,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
 
                     JsonRpcClient.send('invoke', params, function(error,response){
                         if(error) return callback(error);
-                        console.log('connect ' +JSON.stringify(response));
+                        // console.log('connect ' +JSON.stringify(response));
 
 
                         //generate caller sdpAnswer
@@ -278,7 +278,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                             if(error) return callback(error);
 
                             callerSdpAnswer =_callerSdpAnswer.value;
-                            console.log('caller sdp answer ' + JSON.stringify(callerSdpAnswer));
+                            // console.log('caller sdp answer ' + JSON.stringify(callerSdpAnswer));
 
                             //generate callee sdpAnswer
 
@@ -295,7 +295,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                                 if(error) return callback(error);
 
                                 calleeSdpAnswer = _calleeSdpAnswer.value;
-                                console.log('callee sdp answer ' + JSON.stringify(calleeSdpAnswer));
+                                // console.log('callee sdp answer ' + JSON.stringify(calleeSdpAnswer));
 
 
                                 var obj = {
@@ -303,7 +303,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
                                     calleeSdpAnswer : calleeSdpAnswer
                                 }
 
-                                console.log('sdp answer ' + JSON.stringify(obj));
+                                // console.log('sdp answer ' + JSON.stringify(obj));
                                 callback(null,obj);
                             });
 
@@ -320,7 +320,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
 
                             JsonRpcClient.send('invoke',params,function(error,response){
                                 if(error) console.log('gather candidate error callee ' +error);
-                                console.log('gather candidates response callee '+JSON.stringify(response));
+                                // console.log('gather candidates response callee '+JSON.stringify(response));
                             });
 
                         });
@@ -338,7 +338,7 @@ server.expose('incommingCallResponse', function(args,opt,callback) {
 
                         JsonRpcClient.send('invoke',params,function(error,response){
                             if(error) console.log('gathercandidate error caller ' +error);
-                            console.log('gather candidates response caller '+JSON.stringify(response));
+                            // console.log('gather candidates response caller '+JSON.stringify(response));
                         });
                        
 
