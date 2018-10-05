@@ -31,14 +31,14 @@ function errorCallback(error) {
 function onEvent(_message) {
     var candidate = _message.value.data.candidate;
     var message = null;
-    // console.log('onEvent ' +_message);
-    if(_message.object === webRtcEndpoint[callerId]){
+   
+    var object = _message.value.object
+    if(object === webRtcEndpoint[callerId]){
         message = {id:'serverCandidate',userId: callerId,candidate : candidate};
     }    
     else {
         message = {id:'serverCandidate',userId: calleeId,candidate: candidate};
     }    
-
      
     socket.emit('candidate',JSON.stringify(message));
 }
@@ -95,6 +95,18 @@ server.expose('candidate',function(args,opt,callback){
     // console.log('client-candidate ' +args[0]);
     var message = JSON.parse(args[0]);
     var id = message.userId;
+    var params = {
+        type:'IceCandidate',
+        operation:'getComplexType',
+        operationParams:{
+            candidate: message.candidate
+        }
+    };
+
+
+    JsonRpcClient.send('invoke',params,function(error,response){
+        console.log('get complex type ',+JSON.stringify(response));
+    });
     // console.log('object candidate '+message.candidate);
     if(webRtcEndpoint[id] && pipeline){
         var params = {
